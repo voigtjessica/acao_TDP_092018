@@ -1,0 +1,359 @@
+---
+title: "Press Release"
+author: "Jessica Voigt"
+date: "6 de agosto de 2018"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+#Tabelas se output = word: https://davidgohel.github.io/flextable/articles/overview.html
+library(dplyr)
+library(data.table)
+library(janitor)
+library(tidyr)
+library(scales)
+library(knitr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+library(googledrive)
+
+`%notin%` = function(x,y) !(x %in% y)
+
+perc <- function(x) { 
+  paste0(round(x,2)*100, "%")
+}
+
+setwd("C:/Users/jvoig/OneDrive/Documentos/acao_TDP_092018")
+#Base de obras do FNDE (05/07/2018)
+load("obras05072018.Rdata") #objeto : obras
+
+obras_fnde <- as_tibble(obras) %>%
+  clean_names() %>%
+  mutate(id = as.character(id))
+
+not_project<- c("COBERTURA DE QUADRA ESCOLAR - PROJETO PRÓPRIO",
+                "COBERTURA DE QUADRA ESCOLAR GRANDE - PROJETO FNDE",
+                "COBERTURA DE QUADRA ESCOLAR PEQUENA - PROJETO FNDE",
+                "QUADRA ESCOLAR COBERTA - PROJETO PRÓPRIO ",
+                "QUADRA ESCOLAR COBERTA COM VESTIÁRIO- PROJETO FNDE",
+                "Reforma",
+                "QUADRA ESCOLAR COBERTA - PROJETO PRÓPRIO",
+                "Ampliação",
+                "QUADRA ESCOLAR COBERTA COM PALCO- PROJETO FNDE",
+                "Quadra Escolar Coberta e Vestiário - Modelo 2")
+
+
+#  Tempo de execução dos projetos-padrão:
+
+tempo_projeto <- data.frame(tipo_do_projeto = c("Escola de Educação Infantil Tipo B",
+                                                "Escola de Educação Infantil Tipo C",
+                                                "MI - Escola de Educação Infantil Tipo B",
+                                                "MI - Escola de Educação Infantil Tipo C",
+                                                "Espaço Educativo - 12 Salas",
+                                                "Espaço Educativo - 01 Sala",
+                                                "Espaço Educativo - 02 Salas",
+                                                "Espaço Educativo - 04 Salas",
+                                                "Espaço Educativo - 06 Salas",
+                                                "Projeto 1 Convencional",
+                                                "Projeto 2 Convencional",
+                                                "Construção",
+                                                "Escola com projeto elaborado pelo concedente",
+                                                "Escola com Projeto elaborado pelo proponente",
+                                                "Espaço Educativo - 08 Salas",
+                                                "Espaço Educativo Ensino Médio Profissionalizante"),
+                     tempo_execucao_dias = c(270,180,180,120,390,150,150,210,210,
+                                             330,270,720,720,720,720,720))
+
+# Tempo de execução das obras estaduais que temos o cronograma
+execucao_cronogramas_lai <- fread("tempo_obra.csv")
+execucao_cronogramas_lai <- execucao_cronogramas_lai  %>%
+  mutate(project_id = as.character(project_id),
+         tempo_obra_dias = tempo_obra*30) %>%
+  rename(tempo_obra_dias_via_lai = tempo_obra_dias) %>%
+  select(1,3)
+
+# Objeto geral:
+geral <- obras_fnde %>%
+  filter(tipo_do_projeto %notin% not_project, #apenas constru de esc e creches
+         situacao != "Concluída",             #que não estão concl. e canceladas
+         situacao != "Obra Cancelada",
+         id %in% ids_control_campaign) %>% 
+  rename(responsabilidade = rede_de_ensino_publico) %>%
+  left_join(execucao_cronogramas_lai, by=c("id" = "project_id")) %>% #infos que pegamos via lai
+  left_join(tempo_projeto) %>%      #tempo que o projeto padrão dura
+  mutate(data_de_assinatura_do_contrato = as.Date(data_de_assinatura_do_contrato, format="%Y-%m-%d %H:%M:%S"),
+         data_prevista_de_conclusao_da_obra= as.Date(data_prevista_de_conclusao_da_obra, format="%d/%m/%Y"),
+         final_previsto = if_else(!is.na(tempo_obra_dias_via_lai), tempo_obra_dias_via_lai + data_de_assinatura_do_contrato, 
+                                  if_else(!is.na(data_prevista_de_conclusao_da_obra), data_prevista_de_conclusao_da_obra, 
+                                          data_de_assinatura_do_contrato+tempo_execucao_dias)),
+         paralisada = if_else(situacao == "Inacabada" | 
+                                situacao == "Paralisada" |
+                                !is.na(data_de_assinatura_do_contrato) & situacao != "Execução" |
+                                percentual_de_execucao > 0 & situacao != "Execução" | 
+                              !is.na(data_prevista_de_conclusao_da_obra) & situacao == "Licitação" |
+                                !is.na(data_prevista_de_conclusao_da_obra) & situacao == "Em Reformulação" |
+                              !is.na(data_prevista_de_conclusao_da_obra) & situacao == "Contratação" |
+                              !is.na(data_prevista_de_conclusao_da_obra) & situacao == "Planejamento pelo proponente" ,  
+                              1 , 0),
+         atrasada = if_else(final_previsto < "2018-07-05" & paralisada == 0, 
+                            1, 0),
+         atrasada = if_else(is.na(final_previsto), 0, atrasada),
+         nao_iniciada = if_else((paralisada == 0 & situacao == "Licitação" | 
+                                   paralisada == 0 & situacao == "Planejamento pelo proponente" |
+                                   paralisada == 0 & situacao == "Contratação" |
+                                   paralisada == 0 & situacao == "Em Reformulação"), 
+                                1, 0),
+         execucao = if_else(situacao == "Execução" & atrasada == 0, 1, 0),
+         responsabilidade = as.character(responsabilidade),
+         responsabilidade = if_else(id == "1063221" | id == "29054", 
+                                    "Municipal", responsabilidade),
+         logradouro = tolower(logradouro),
+         logradouro = str_trim(logradouro), # retirar espaços no fim
+         logradouro = ifelse(logradouro=="", NA, logradouro),
+         sem_end = if_else(is.na(logradouro), 1, 0), #obras que não tÊm endereço.
+         problema_detectado = ifelse(paralisada == 1 & sem_end == 1, #obras com problemas
+                                     "paralisada; sem endereço",
+                                     if_else(paralisada == 1, "paralisada",
+                                      ifelse(atrasada == 1 & sem_end == 1, "atrasada; sem endereço",
+                                             ifelse(atrasada == 1, "atrasada",
+                                              ifelse(sem_end == 1, "sem endereço",
+                                                      NA))))))
+
+#Objeto das obras estaduais
+atrasadas_paralisadas_estaduais <- geral %>%
+  filter(responsabilidade == "Estadual")
+
+estaduais_a_ser_entregues <- atrasadas_paralisadas_estaduais %>%
+  nrow()
+
+#Objeto das obras municipais
+munic_atra_par <- geral %>%  
+  filter(responsabilidade == "Municipal")
+
+munic_a_ser_entregue <- munic_atra_par %>%
+  nrow()
+
+# Quantas obras analisamos? 
+obras_a_ser_entregues <- geral %>%
+  nrow()
+
+#Quantos municipios brasileiros possuem obras (estaduais e municipais)
+munic_com_obra <- geral %>%
+  distinct(municipio, uf) %>%
+  nrow()
+
+#Municipios com obras apresentando problemas de obras paralisadas / atrasadas
+munic_com_problema <- geral %>%
+  filter(paralisada == 1 |
+         atrasada == 1) %>%
+  distinct(municipio, uf) %>%
+  nrow()
+
+
+# Situação das obras em relação ao total de obras a ser entregue
+tbl1 <- geral %>%
+  group_by(responsabilidade) %>%
+  summarise(paralisadas = sum(paralisada),
+            atrasadas = sum(atrasada),
+            execucao = sum(execucao),
+            nao_iniciada = sum(nao_iniciada)) %>%
+  adorn_totals("row") %>%
+  mutate(perc_paralisada = paralisadas/obras_a_ser_entregues,
+         perc_atrasadas = atrasadas/obras_a_ser_entregues,
+         perc_execucao = execucao/obras_a_ser_entregues,
+         perc_nao_iniciadas = nao_iniciada/obras_a_ser_entregues,
+         perc_paralisada = perc(perc_paralisada),
+         perc_atrasadas = perc(perc_atrasadas),
+         perc_execucao = perc(perc_execucao),
+         perc_nao_iniciadas = perc(perc_nao_iniciadas))
+
+# Comparação de estados e municípios:
+est_x_munic <- geral %>%
+  mutate(n=1) %>%
+  summarise(total_a_ser_entregue_munic = sum(n[which(responsabilidade == "Municipal")]),
+            obras_atrasadas_munic = sum(atrasada[which(responsabilidade == "Municipal")]),
+            perc_atrasadas_munic = round(obras_atrasadas_munic/total_a_ser_entregue_munic,2),
+            obras_paralisadas_munic = sum(paralisada[which(responsabilidade == "Municipal")]),
+            perc_paralisadas_munic = round(obras_paralisadas_munic/total_a_ser_entregue_munic,2),
+            total_a_ser_entregue_est = sum(n[which(responsabilidade == "Estadual")]),
+            obras_atrasadas_est = sum(atrasada[which(responsabilidade == "Estadual")]),
+            perc_atrasadas_est = round(obras_atrasadas_est/total_a_ser_entregue_est,2),
+            obras_paralisadas_est = sum(paralisada[which(responsabilidade == "Estadual")]),
+            perc_paralisadas_est = obras_paralisadas_est/total_a_ser_entregue_est) %>%
+  gather(status, obras_estaduais, 6:10) %>%
+  gather(status2, obras_municipais, 1:5) %>%
+  filter(status2 == "total_a_ser_entregue_munic" & status == "total_a_ser_entregue_est" |
+           status2 == "obras_atrasadas_munic" & status == "obras_atrasadas_est" |
+           status2 == "perc_atrasadas_munic" & status == "perc_atrasadas_est" |
+           status2 == "obras_paralisadas_munic" & status == "obras_paralisadas_est" |
+           status2 == "perc_paralisadas_munic" & status == "perc_paralisadas_est") %>%
+  select(-status2) %>%
+mutate(ordem = 1:n())
+
+
+est_x_munic[1,1] <- "Total obras"
+est_x_munic[2,1] <- "Obras atrasadas"
+est_x_munic[3,1] <- "% Atrasadas"
+est_x_munic[4,1] <- "Obras paralisadas"
+est_x_munic[5,1] <- "% Paralisadas"
+
+est_x_munic[1,4] <- 5
+est_x_munic[2,4] <- 1
+est_x_munic[3,4] <- 2
+est_x_munic[4,4] <- 3
+est_x_munic[5,4] <- 4
+
+# Municípios com problemas no endereço
+# Código para end sem número. Não vamos aplicar agora.
+         # end_sem_num = if_else(!grepl("(?:km|rua|projetada)\\s\\d{1,9}", logradouro) &
+         #                       grepl("^.+?\\d$", logradouro), 0, 1 ),
+         # end_sem_num = if_else(sem_end == 1, 0, end_sem_num))
+
+#obras sem endereço
+obras_sem_send <- geral %>% summarise(obras_sem_send = sum(sem_end))
+
+#Lista de obras que receberáo alerta:
+lista_final <- geral %>%
+  filter(!is.na(problema_detectado)) %>%
+  select(id, nome, municipio, uf, responsabilidade, logradouro, termo_convenio, responsabilidade,  problema_detectado) %>%
+  arrange(municipio)
+
+# Vamos enviar alertas para quantas obras?
+obras_que_enviamos_alertas <- lista_final %>% nrow()
+
+munic_que_enviamos_alertas <- lista_final %>% 
+  filter(responsabilidade == "Municipal") %>%
+  distinct(municipio, uf) %>% 
+  nrow()
+
+estados_que_enviamos_alertas <- lista_final %>%
+  filter(responsabilidade == "Estadual") %>% 
+  distinct(uf) %>% 
+  nrow()
+
+#Salvei a lista 
+# > getwd()
+# [1] "C:/Users/jvoig/OneDrive/Documentos/levantamentos_estados"
+# write.csv(lista_final , file="lista_final_alertas.csv", sep=";", quote = TRUE,
+#           row.names = FALSE, )
+# 
+# drive_find(n_max=10) #autenticação
+
+# lista_final_sheet <- drive_upload(
+#   "lista_final_alertas.csv",
+#   path="~/TB/Tadepé/Transparência Brasil - Tá de Pé 2018",
+#   name = "Obras com problemas",
+# type = "spreadsheet")
+
+# obras_estaduais e municipais sem end:
+
+tbl2 <- geral %>%
+  group_by(responsabilidade) %>%
+  summarise(obras_sem_endereco = sum(sem_end),
+            obras_totais = n(),
+            perc= round(obras_sem_endereco/obras_totais,2))
+
+#Lista munic final
+# csv, com nome do município, UF e coluna indicando quantas obras atrasadas, paralisadas e quantas obras sem endereço, e quantas obras com incongurência (soma dos três - intersecção), 
+
+lista_munic_final <- geral %>%
+  filter(!is.na(problema_detectado)) %>%
+  group_by(municipio, uf, responsabilidade) %>%
+  summarise(atrasadas = sum(atrasada),
+            paralisadas = sum(paralisada),
+            sem_endereco = sum(sem_end)) %>%
+  mutate(total_obras_com_problemas = atrasadas + paralisadas + sem_endereco)
+
+
+# #Upando no drive:
+# write.csv(lista_munic_final , file="lista_munic_final.csv", row.names = FALSE, sep=";", quote = TRUE)
+# 
+# lista_munic_final_sheet <- drive_upload(
+#   "lista_munic_final.csv",
+#   path="~/TB/Tadepé/Transparência Brasil - Tá de Pé 2018",
+#   name = "Municípios notificados",
+# type = "spreadsheet")
+
+```
+
+A Transparência Brasil iniciou em agosto uma campanha de fiscalização do andamento das obras de escolas e creches financiados pelo Fundo Nacional de Desenvolvimento da Educação (FNDE) . Ao todo, foram verificadas `r obras_a_ser_entregues` obras, das quais `r  obras_que_enviamos_alertas`  ou `r perc(obras_que_enviamos_alertas/obras_a_ser_entregues) ` , apresentaram problemas de atraso, paralisação ou ausência de endereço. Ao todo, notificamos  `r munic_que_enviamos_alertas` municípios e  `r estados_que_enviamos_alertas` estados responsáveis por gerir essas obras. Essa campanha faz parte do projeto “Tá de Pé” , uma iniciativa da Transparência Brasil com o apoio do Google.Org .
+
+A Transparência Brasil avaliou o andamento de de obras de escolas e creches em todo o Brasil e a qualidade da informação disponível em transparência ativa sobre essas obras. Das `r obras_a_ser_entregues` escolas e creches a ser entregues, `r tbl1[3,6]` estão paralisadas e `r tbl1[3,7]` estão atrasadas, resultando em 46% das obras com problemas na sua execução.
+
+Além disso, `r perc(obras_sem_send/obras_a_ser_entregues)` obras não possuem dados de endereço. A comprovação de posse do terreno é pré-requisito para realização do Termo de Compromisso, [como foi informado à nossa organização pelo próprio FNDE](http://www.achadosepedidos.org.br/pedidos/regras-de-financiamento-de-creches-e-escolas--proinfancia-par-e-pac). Sendo assim, a ausência de endereço nos dados do próprio FNDE sugerem que o órgão não consegue controlar se o ente que receberá o financiamento possui, de fato, um terreno para construir a escola ou creche.
+
+Nesse novo levantamento também foi verificado que tanto a gestão municipal quanto a gestão estadual das obras apresentam sérias falhas: enquanto 45% das obras municipais estão paralisadas ou atrasadas, a proporção nas obras estaduais é de 51%. Já quando olhamos a qualidade da informação disponível, verificamos que enquanto 5% das obras municipais não possuem endereço, essa proporção sobe para 28% nas obras estaduais.
+
+Quando olhamos apenas para as obras municipais , que correspondem a `r perc(munic_a_ser_entregue/obras_a_ser_entregues)` das obras, verificamos que  a situação  piorou desde o ano passado. Em 2017, as obras municipais apresentaram atraso em 17% e paralisação em 29% dos casos. Já em 2018 o número de obras atrasadas caiu para `r paste0(round(est_x_munic[3,3],2)*100, "%")` porém o número de obras paralisadas aumentou para `r paste0(round(est_x_munic[5,3],2)*100, "%")` .
+
+Por sua vez, as obras estaduais correspondem aos `r perc(estaduais_a_ser_entregues/obras_a_ser_entregues)` das obras restantes a serem entregues. Destas `r paste0(round(est_x_munic[3,2],2)*100, "%")` estão atrasadas e `r paste0(round(est_x_munic[5,2],2)*100, "%")` estão paralisadas.
+
+A lista completa dos municípios que apresentaram problemas pode ser [verificada aqui](https://docs.google.com/spreadsheets/d/1880G0DVoVfonA4OnVfv3i6DOZzc2qU2HmT0I4pcs-3w/edit?usp=sharing) . Já a lista completa das obras que apresentaram problemas [pode ser conferida aqui](https://docs.google.com/spreadsheets/d/11Rc17CeU0ISciQ7AlLbw1OIsedNbmEJXNXX9ygbLGzg/edit?usp=sharing). A Transparência Brasil também elaborou um guia para melhor compreensão dessas tabelas, que [pode ser acessado aqui](https://docs.google.com/document/d/1TypV8qBgi5KwfgMgLdRDL_Pg7ZFhbIrVYT8Srt0dwiM/edit?usp=sharing).
+
+Mais informações:
+Contato
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+tbl3 <- geral %>%
+  summarise(paralisadas = sum(paralisada),
+            atrasadas = sum(atrasada),
+            sem_endereco = sum(sem_end),
+            obras_totais = n(),
+            perc_paralisada = round(paralisadas/obras_totais,2),
+            perc_atrasadas = round(atrasadas/obras_totais,2),
+            perc_sem_endereco = round(sem_endereco/obras_totais, 2)) %>%
+  select(perc_paralisada, perc_atrasadas, perc_sem_endereco) %>%
+  gather(problema, perc_obras, 1:3)
+
+problemas_nomes <- c("Obras sem endereço", "Obras atrasadas", "Obras paralisadas")
+
+tbl3 %>%
+  ggplot(aes(x = reorder(problema, perc_obras), y = perc_obras, fill=problema))+
+  geom_bar(stat = "identity") + theme_minimal() + 
+  scale_fill_manual(values=c("#6A6F91","#5ABAD2",  "#4D3143")) +
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+  labs(x = "", 
+       y="% Obras") +
+  theme(legend.position="none") + scale_x_discrete(labels= problemas_nomes) +
+  ggtitle("Problemas detectados")
+
+
+```
+
+
+
+## Problemas por estado
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+#media problemas por estado:
+
+tbl4 <- geral %>%
+  mutate(problema = as.numeric(!is.na(problema_detectado)))  %>%
+  group_by(uf) %>%
+  summarise(problemas = mean(problema))
+
+roraima <- tbl4 %>%
+  filter(uf == "RR") %>% 
+  select(problemas) 
+
+tbl4 %>%
+  ggplot(aes(x = reorder(uf, - problemas), y = problemas)) +
+  geom_bar(stat = "identity", fill = "#6A6F91") +
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+  theme_minimal() +
+    labs(x = "", 
+       y="") +
+  theme(legend.position="none",
+        axis.text.x=element_text(size=rel(0.7))) +
+  ggtitle("% Obras com problemas por estado")
+
+```
+
