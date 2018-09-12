@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIMEC - Sistema Integrado de Monitoramento Execução e Controle</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=ISO-8895-1'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Mainly scripts -->
+    <script type="text/javascript" src="/ruxitagentjs_2SVfqr_10149180820160414.js" data-dtconfig="rid=RID_1482322394|rpid=455933269|domain=mec.gov.br|reportUrl=/rb_43b666f6-1f0a-43c3-b466-a6b0537b8f18|bp2=1|featureHash=2SVfqr|lastModification=1536014663997|dtVersion=10149180820160414|tp=500,50,0,1|rdnt=1|agentUri=/ruxitagentjs_2SVfqr_10149180820160414.js"></script><script src="/zimec/public/temas/simec/js/jquery-1.11.3.js"></script>
+    <script src="/zimec/public/temas/simec/js/bootstrap.min.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/estrutura/js/funcoes.js"></script>
+    <script src="/includes/funcoes.js"></script>
+
+    <!-- Highcharts -->
+    <script language="javascript" src="/includes/Highcharts-4.0.3/js/highcharts.js"></script>
+    <script language="javascript" src="/includes/Highcharts-4.0.3/js/highcharts-more.js"></script>
+    <script language="javascript" src="/includes/Highcharts-4.0.3/js/modules/solid-gauge.src.js"></script>
+
+    <!-- Data picker -->
+    <script src="/zimec/public/temas/simec/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/datapicker/locales/bootstrap-datepicker.pt-BR.js"></script>
+
+    <!-- Ion Range Slider -->
+    <script src="/zimec/public/temas/simec/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+
+    <!-- textext -->
+    <link href="/zimec/public/temas/simec/js/plugins/textext/css/textext.core.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/textext/css/textext.plugin.tags.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/textext/css/textext.plugin.autocomplete.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/textext/css/textext.plugin.focus.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/textext/css/textext.plugin.prompt.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/textext/css/textext.plugin.arrow.css" rel="stylesheet">
+
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.core.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.tags.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.autocomplete.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.suggestions.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.filter.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.focus.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.prompt.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.ajax.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.arrow.js"></script>
+    <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.plugin.arrow.js"></script>
+
+    <!-- Switchery -->
+    <script src="/zimec/public/temas/simec/js/plugins/switchery/switchery.js"></script>
+
+    <script src="js/snap.svg.js"></script>
+    <script src="js/jquery.browser.mobile.js"></script>
+    <script src="js/liquid.meter.js"></script>
+    <script src="js/Mapas.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <!--<script src="js/html5shiv.js"></script>-->
+    <!--<script src="js/respond.min.js"></script>-->
+    <![endif]-->
+
+    <link href="/zimec/public/temas/simec/fonts/awesome/font-awesome.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/fonts/glyphicons/glyphicons.css" rel="stylesheet">
+
+    <link href="/zimec/public/temas/simec/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/jquery-ui/jquery-ui.theme.min.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/ion.rangeSlider.skinHTML5.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/normalize.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <link href="/zimec/public/temas/simec/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+
+    <link href="/zimec/public/temas/simec/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/dropzone/basic.css" rel="stylesheet">
+
+    <link href="/zimec/public/temas/simec/css/plugins/bootstrap-switch/bootstrap-switch.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+
+    <link href="/zimec/public/temas/simec/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/nanoscroll/nanoscroller.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/jstree/style.min.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/animate.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/style.min.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/simec.css" rel="stylesheet">
+</head>
+<body class="fixed-nav ">
+<div id="wrapper" style="background: #273A4A !important;">
+    <nav class="navbar-default navbar-static-side" role="navigation" >
+        <div class="sidebar-collapse">
+            
+    <ul class="nav metismenu" id="side-menu">
+        <li>
+            <a href="index.php"><i class="fa fa-search"></i> <span class="nav-label">Procurar nova obra</span> </a>
+        </li>
+
+        <li class="">
+            <a href="#">
+                <i class="fa fa-map-o"></i> <span class="nav-label">Dados da Obra</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse in">
+                <li class="">
+                    <a href="dadosobra.php?obra=1083898"><i class="fa fa-folder-o"></i> <span class="nav-label">Informações da Obra</span></a>
+                </li>
+                <li class="">
+                    <a href="licitacao.php?obra=1083898"><i class="fa fa-files-o"></i> <span class="nav-label">Licitação</span></a>
+                </li>
+                <li class="">
+                    <a href="contratacao.php?obra=1083898"><i class="fa fa-edit"></i> <span class="nav-label">Contratação</span></a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="active">
+            <a href="#"><i class="fa fa-object-ungroup">
+                </i> <span class="nav-label">Acompanhamento da Obra</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse in">
+                <li class="">
+                    <a href="vistoria.php?obra=1083898"><i class="fa fa-calendar-check-o"></i> <span class="nav-label">Vistorias</span>  </a>
+                </li>
+                <li class="active">
+                    <a href="recurso.php?obra=1083898"><i class="fa fa-dollar"></i> <span class="nav-label">Recursos</span></a>
+                </li>
+                <li class="">
+                    <a href="execucaoorcamentaria.php?obra=1083898"><i class="fa fa-object-ungroup"></i> <span class="nav-label">Execução Financeira</span></a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+            </div>
+    </nav>
+    <div id="page-wrapper">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-fixed-top" role="navigation"
+                 style="margin: 0px; height: 61px; border-bottom: 1px solid #273A4A !important; background: #273A4A"
+                 no-repeat
+            ">
+            <div class="navbar-left">
+                <ul class="header-nav header-nav-options">
+                    <li class="header-nav-brand"><img src="/zimec/public/img/logo-simec.png" class="img-responsive"
+                                                      style="width: 170px; padding: 5px;"></li>
+
+                </ul>
+            </div>
+
+            <style>
+                .tarja-aviso {
+                    margin-top: 15px;
+                    word-spacing: 10px;
+                }
+
+                .tarja-aviso span {
+                    /*color: #fff14f !important;*/
+                    color: #FFC600 !important;
+                    font-size: 20px !important;
+                }
+                .navbar-left {
+                        background: #273A4A !important;
+
+                 }
+                .header-nav .header-nav-brand{height: 58px !important;background: #273A4A }
+                .footer{display: none}
+
+                .gray-bg{background: #D2C6C6}
+                .blue-bg{background: #273A4A}
+
+                dl{margin-bottom: 10px !important;}
+
+            </style>
+            
+            <div class="navbar-center" style="width: 70%;">
+                <ul class="header-nav header-nav-options">
+                    <li style="padding: 0px 0 14px 12px; width:100%" class="text-center tarja-aviso hidden-xs left">
+                        <link href='https://fonts.googleapis.com/css?family=Candal' rel='stylesheet' type='text/css'>
+                        <span style="font-size: 26px !important; font-family: 'Candal', sans-serif;', serif;">Recursos</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="navbar-right hidden-xs">
+
+                <img src="img/bg_logo.png" style="margin-right: 20px;margin-top: 10px">
+            </div>
+            </nav>
+        </div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <style type="text/css">
+    .dl-horizontal dt {
+        white-space: normal !important;
+
+    }
+
+    .wrapper-content {
+        padding: 0
+    }
+
+    #meterSales {
+        display: none
+    }
+
+    dt {
+       font-weight: normal;
+    }
+
+    dd{
+        font-weight: bold;
+    }
+
+    @media (min-width: 768px) {
+        .dl-horizontal dd {
+            margin-left: 200px;
+        }
+
+        .dl-horizontal dt {
+            width: 180px;
+        }
+    }
+
+
+    /* =============== Estilos do autocomplete =============== */
+    .ui-autocomplete {
+        background: #fff;
+        border-top: 1px solid #ccc;
+        cursor: pointer;
+        font: 15px 'Open Sans',Arial;
+        margin-left: 3px;
+        width: 493px !important;
+        position: fixed;
+        z-index: 9999 !important;
+    }
+
+    .ui-autocomplete .ui-menu-item {
+        list-style: none outside none;
+        padding: 7px 0 9px 0px !important;
+        border: none !important;
+    }
+
+    .ui-autocomplete .ui-menu-item:hover { background: #eee;border: none !important; }
+
+    .ui-autocomplete .ui-corner-all {
+        color: #666 !important;
+        display: block;
+        border: none !important;
+    }
+</style>
+<div class=" border-bottom white-bg dashboard-header" style="margin-bottom: 20px;">
+
+    <script type="text/javascript">
+        function print(url, nome){
+            var janela = window.open( url, nome, 'width=780, height=465, status=1, menubar=0, toolbar=0, scrollbars=1, resizable=1' );
+            janela.focus();
+        }
+    </script>
+    <h2>Espaço Educativo Urbano Rural de 4 Salas -Escola Municipal Vila Nova II - Flores - PE (1083898)</h2>
+    <div style="float: right"><a onclick="print('print.php?obra=1083898', 'Espaço Educativo Urbano Rural de 4 Salas -Escola Municipal Vila Nova II - Flores - PE' );"><i class="fa fa-print"></i> <span class="nav-label">Imprimir</span>  </a></div>
+
+
+    <div class="ibox-content">
+
+
+        <div class="row">
+            <div class="col-md-2" >
+
+                
+                <img class="img_foto" width="100" src="img/sem_imagem.jpg"
+                     style="border: 1px #ccc solid;padding: 5px;"/>
+
+            </div>
+            <div class="col-md-5">
+
+                <dl class="dl-horizontal">
+                    <dt>Situação:</dt>
+                                        <dd><span class="label label-navy">
+                            Em 
+                            Planejamento pelo proponente</span></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Município - UF:</dt>
+                    <dd>Flores                        - PE</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Localização:</dt>
+                                        <dd><a class="modal-mapa" coord="-7.85165555555556,-37.9666666666667" data-toggle="modal" data-target="#mapa1"><i class="fa fa-map-marker"></i> Como chegar</a></dd>
+                </dl>
+
+                <dl class="dl-horizontal">
+                    <dt>Cep:</dt>
+                    <dd>56850-000</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Endereço:</dt>
+                    <dd>Rua Espedito Marques de Sousa,   </dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Bairro:</dt>
+                    <dd>Vila Nova </dd>
+                </dl>
+
+                <dl class="dl-horizontal">
+                    <dt>Termo/Convênio:</dt>
+                    <dd>201803402/2018</dd>
+                </dl>
+                                <dl class="dl-horizontal">
+                    <dt>Fim da Vigência Termo/Convênio:</dt>
+                    <dd>-</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Situação do Termo/Convênio:</dt>
+                    <dd>-</dd>
+                </dl>
+
+            </div>
+            <div class="col-md-5" style="text-align: center">
+
+                <dl class="dl-horizontal">
+                    <h3>Percentual de Execução</h3>
+
+                    <div class="liquid-meter-wrapper liquid-meter-sm mt-lg"
+                         style="text-align: center;margin: 0 auto;width:180px">
+                        <div class="liquid-meter" style="text-align: center">
+                            <meter min="0" max="100" value="0.00%"
+                                   id="meterSales"></meter>
+                        </div>
+                                            </div>
+                    <div class="liquid-meter-wrapper liquid-meter-sm mt-lg"
+                         style="text-align: center;margin: 0 auto;width:180px">
+                        Data Prevista de Conclusão da Obra: <span style="font-weight: bold"></span>
+                    </div>
+                </dl>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="ibox animated modal" id="mapa1" tabindex="-1" role="dialog" aria-hidden="true" style="height: 800px">
+    <div class="modal-dialog modal-lg" style="width: 95%;">
+
+        <div class="modal-content animated flipInY">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title">Como chegar</h3>
+            </div>
+            <div class="row">
+
+
+                <form method="get" class="form-horizontal" style="margin-top: 30px">
+
+
+                    <div class="form-group"><label class="col-md-2 control-label">Digite seu Endereço</label>  
+
+                        <div class="col-md-9"><input type="text" id="txtEndereco" name="txtEndereco"
+                                                     class="form-control"></div>
+                    </div>
+
+                    <div class="form-group" style="display: none"><label class="col-md-2 control-label">Endereço da obra</label>
+
+                        <div class="col-md-9"><input type="text" id="txtEnderecoChegada" name="txtEnderecoChegada"
+                                                     class="form-control"></div>
+                    </div>
+
+                    <div style="padding: 0px 30px;">
+                        <div class="hr-line-dashed"></div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="mapa"></div>
+                    </div>
+
+                    <input type="hidden" id="txtLatitude" name="txtLatitude" />
+                    <input type="hidden" id="txtLongitude" name="txtLongitude" />
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="js/jquery-ui.custom.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        
+        $('#meterSales').liquidMeter({
+            shape: 'circle',
+            color: '#5e5e5e',
+            background: '#F9F9F9',
+            fontSize: '24px',
+            fontWeight: '600',
+            stroke: '#F2F2F2',
+            textColor: '#333',
+            liquidOpacity: 0.9,
+            liquidPalette: ['#333'],
+            speed: 3000,
+            animate: !$.browser.mobile
+        });
+    });
+
+
+
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script>
+
+
+    $("#txtEndereco").autocomplete({
+        source: function (request, response) {
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': request.term + ', Brasil', 'region': 'BR' }, function (results, status) {
+                response($.map(results, function (item) {
+                    return {
+                        label: item.formatted_address,
+                        value: item.formatted_address,
+                        latitude: item.geometry.location.lat(),
+                        longitude: item.geometry.location.lng()
+                    }
+                }));
+            })
+        },
+        select: function (event, ui) {
+
+
+
+                        var myLatlng = new google.maps.LatLng(coordToDec("7.51.47.S"),coordToDec("37.58.2.W"));
+
+
+            
+            $("#txtLatitude").val(ui.item.latitude);
+            $("#txtLongitude").val(ui.item.longitude);
+            var location = new google.maps.LatLng(ui.item.latitude, ui.item.longitude);
+
+            var endereco_partida = $("#txtEndereco").val();
+
+
+            var directionsDisplay;
+            if(directionsDisplay != null) {
+                directionsDisplay.setMap(null);
+                directionsDisplay = null; }
+
+            directionsDisplay = new google.maps.DirectionsRenderer({map:map})
+
+
+            var directionsService = new google.maps.DirectionsService({map:map});
+
+
+
+
+
+
+            var request = {
+                origin: myLatlng,
+                destination: location,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+              directionsService.route(request, function (result, status) {
+                   if (status == google.maps.DirectionsStatus.OK) {
+                       directionsDisplay.setDirections(result);
+
+
+                  }
+                  else{
+                       alert('Erro grave');
+                   }
+             });
+
+
+        }
+    });
+
+       function coordToDec(coord){
+        var match, dec, s, d, m,direcao;
+        match = coord.split(".");
+        d = match[0];
+        m = match[1];
+        s = match[2];
+        direcao = match[3];
+        //alert(direcao);
+        dec = Math.sign(d) * (Math.abs(d) + (m / 60.0) + (s / 3600.0));
+        if(direcao == 'S' || direcao == 'W' || direcao !== 'undefined') {
+            dec = dec * -1;
+        }
+        return dec;
+    }
+    function initialize() {
+
+
+
+                     var myLatlng = new google.maps.LatLng(coordToDec("7.51.47.S"),coordToDec("37.58.2.W"));
+                var options = {
+            zoom: 5,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("mapa"), options);
+
+        marker = new google.maps.Marker({
+            map: map
+        });
+        marker.setPosition(myLatlng);
+
+
+
+    }
+
+
+
+
+
+    $(".modal-mapa").click(function(){
+
+        google.load('maps', '3.1', {other_params:'sensor=false&language=pt-BR', "callback" : function(){
+
+            initialize();
+
+                        var myLatlng = new google.maps.LatLng(coordToDec("7.51.47.S"),coordToDec("37.58.2.W"));
+
+            
+            window.setTimeout(function() {
+                google.maps.event.trigger(map, 'resize');
+                map.setCenter(myLatlng);
+                var options = {
+                    zoom: 5,
+                    center: myLatlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById("mapa"), options);
+
+                marker = new google.maps.Marker({
+                    map: map
+                });
+                marker.setPosition(myLatlng);
+
+            }, 1000);
+
+        }});
+
+
+    });
+
+
+    $("form").submit(function (event) {
+        event.preventDefault();
+    });
+
+
+</script>
+
+<style>
+    #mapa {
+        width: 99%;
+        height: 400px;
+        margin: 5px;
+    }
+
+</style>
+
+
+           <!-- Pagamentos -->
+                        <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Repasse FNDE por Obra</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Valor do Pagamento</th>
+                                    <th>Percentual pagamento</th>
+                                    <th>Data de Pagamento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                                                    <tr>
+                                        <td colspan="10">Nenhum resultado encontrado.</td>
+                                    </tr>
+                                                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /Pagamentos -->
+
+            <!-- grafico --> 
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Extrato Bancário da Conta do Termo/Convênio</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                                    <table class="table table-bordered table-hover table-striped">
+                <tr>
+                    <td nowrap="nowrap"><img class="img_detalhe" src="/imagens/mais.gif" style="margin-right: 5px;" />Processo</td>
+                    <td>CNPJ</td>
+                    <td>Razão Social</td>
+                    <td>Banco</td>
+                    <td>Agência</td>
+                    <td>Conta</td>
+                    <td>Data</td>
+                    <td>Saldo da Conta</td>
+                    <td>Saldo Fundos</td>
+                    <td>Saldo da Poupança</td>
+                    <td>Saldo CDB</td>
+                    <td style="font-weight: bold">Saldo TOTAL</td>
+                </tr>
+                                    <tr >
+                        <td>23400001390201865</td>
+                        <td>10347466000111</td>
+                        <td>PREF MUN DE FLORES</td>
+                        <td>001</td>
+                        <td>1060</td>
+                        <td>0000205834</td>
+                        <td>31/07/2018</td>
+                        <td align="right">0,00</td>
+                        <td align="right">0,00</td>
+                        <td align="right">0,00</td>
+                        <td align="right">0,00</td>
+                        <td align="right"  style="font-weight: bold">0,00</td>
+                    </tr>
+                            </table>
+        
+            <script language="javascript" src="/includes/Highcharts-3.0.0/js/highcharts.js"></script>
+            <script language="javascript" src="/includes/Highcharts-3.0.0/js/modules/exporting.js"></script>
+            <script language="javascript" src="/estrutura/js/funcoes.js"></script>
+
+        
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ibox-title">
+                    <h5>Saldos do Processo</h5>
+                    </div>
+        <div style=" ; height: 300px " id="grafico_470546794_34354383" ></div>
+
+        <script type="text/javascript">
+            jQuery(function () {
+
+                // Radialize the colors
+                Highcharts.getOptions().colors = Highcharts.map([ 
+                              '#00BFFF' // Azul claro
+                            , '#55BF3B' // Verde
+                            , '#FFD700' // Amarelo
+                            , '#FF6A6A' // Vermelho claro
+                            , '#eeaaee' // Rosa claro
+                            , '#aaeeee' // Cinza claro
+                            , '#7798BF' // Roxo claro
+                            , '#DDDF0D' // Verde claro
+                            , '#7CCD7C' // Amarelo um pouco mais claro
+                            , '#DF5353' // Vermelho rosa escuro
+                            , '#008000' // Verde
+                            , '#CD0000' // Vermelho
+                            , '#FF4500' // Laranja
+                            , '#ff0066' // Rosa choque
+                            , '#4B0082' // Roxo
+                            , '#808000' // Verde oliva
+                            , '#800000' // Marrom
+                            , '#2F4F4F' // Cinza escuro
+                            , '#006400' // Verde escuro
+                            , '#FFA500' // Amarelo quemado
+                         ] , function(color) {
+                    return {
+                        radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
+                        stops: [
+                            [0, color],
+                            [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                        ]
+                    };
+                });
+
+                var title     = '';
+                var subtitle  = '';
+                jQuery('#grafico_470546794_34354383').highcharts({
+                    chart: {
+                        type: 'area',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: true,
+                        backgroundColor:'rgba(255, 255, 255, 0.0)'
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    title: {
+                        text: title
+                    },
+                    subtitle: {
+                        text: subtitle
+                    },
+                    xAxis: {
+                        categories: ["07\/2018"],
+
+                                                labels: {"rotation":-45,"align":"right"},
+                        
+                                            },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+
+                                                labels: {
+                            formatter: function () { return number_format(this.value, 0, ',', '.'); }                        },
+                        
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                                        tooltip: {
+                        formatter: function() { return '<span>' + this.x + '</b><br /><span style="color: ' + this.series.color + '">Valor</span>: <b>' + number_format(this.y, 2, ',', '.') + '</b>'; }                    },
+                    
+                    
+                    
+                    series: [{"name":"23400001390201865","data":[0]}]
+                });
+            });
+        </script>
+
+        </div></div>
+                <div class="row">
+                <div class="col-md-12"><p>Nenhum registro encontrado</p></div>
+    </div>
+        <script type="text/javascript">
+            jQuery(function(){
+                jQuery('.detalhe_saldo').hide();
+                jQuery('.img_detalhe').click(function(){
+                    if(jQuery(this).attr('src') == '/imagens/mais.gif'){
+                        jQuery('.detalhe_saldo').show();
+                        jQuery(this).attr('src', '/imagens/menos.gif');
+                    } else {
+                        jQuery('.detalhe_saldo').hide();
+                        jQuery(this).attr('src', '/imagens/mais.gif');
+                    }
+                });
+            });
+        </script>
+
+                        </div>
+                </div>
+            </div>
+            <div class="space-15"></div>
+            <!-- /grafico -->
+
+
+
+            <!-- Repasses -->
+            
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    DownloadArquivo = function (arqid) {
+        window.open('?requisicao=download&arqid=' + arqid);
+    };
+    
+    $(document).ready(function(){
+        $('.img_detalhe').click();
+    });
+</script>
+				<div class="footer">
+
+		        </div>
+			</div>
+		</div>
+		
+
+
+		<div class="modal fade" id="modal-user" tabindex="0" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-dialog">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Informações de usuário</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+
+							<div class="col-md-3 col-lg-3 text-center">
+								<img style="width: 95%; margin-bottom: 10px; height: 110px;" class="img-circle profile-pic" src="/seguranca/imagemperfil.php" alt="">
+								<a style="padding-left: 5px;" href="#" class="profile-picture">Editar foto</a>
+							</div>
+							<div class="col-md-9 col-lg-9 hidden-xs hidden-sm">
+
+							</div>
+							<div class="row">
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+					</div>
+				</div><!-- /.modal-content -->
+				<!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
+
+
+		
+		<div class="modal fade" id="modal-confirm">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Aviso!</h4>
+					</div>
+					<div class="modal-body">
+						<p></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+						<button type="button" class="btn btn-primary">Sim</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		
+		<!-- The blueimp Gallery widget -->
+		<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even" style="display: none;">
+			<div class="slides"></div>
+			<h3 class="title"></h3>
+			<a class="prev" style="font-size: 30px;" ><span class="glyphicon glyphicon-chevron-left"></span></a>
+			<a class="next" style="font-size: 30px;" ><span class="glyphicon glyphicon-chevron-right"></span></a>
+			<a class="close">×</a>
+			<a class="play-pause"></a>
+			<ol class="indicator"></ol>
+		</div>
+	</body>
+</html>
+<script language="JavaScript">
+	/** Função de fazer com que o sistema informe que esta havendo uma requisição ajax */
+	$(document).ajaxSend(function (e, jqxhr, settings) {
+		 jQuery("#loading").fadeIn();
+	}).ajaxStop(function(){
+		 jQuery("#loading").fadeOut();
+		 attachInit();
+		 attachEvents();
+	});
+
+	/** Mensagem de carregando quando houver requisições em ajax */
+	$.ajaxSetup({
+		timeout: 0,
+		error: function(xhr, status, error) {
+			console.log("Ocorrência de erro no retorno AJAX: " + status + "\nError: " + error);
+			jQuery("#loading").fadeOut();
+			jQuery("#loading").fadeIn();
+
+			setTimeout(function(){ jQuery("#loading").fadeOut();}, 1300);
+		}
+	});
+
+	// -- Substituíndo o alert do browser.
+	window.alert = function(texto)
+	{
+		jQuery('#modal-alert .modal-body').html(texto);
+		jQuery('#modal-alert').modal();
+	};
+</script>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+	<tr class="template-upload fade">
+		<td>
+			<span class="preview"></span>
+		</td>
+		<td>
+			<p class="name">{%=file.name%}</p>
+			<strong class="error text-danger"></strong>
+		</td>
+		<td>
+			<p class="size">Processando...</p>
+			<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+		</td>
+		<td>
+			{% if (!i && !o.options.autoUpload) { %}
+				<button class="btn btn-primary start" disabled>
+					<i class="glyphicon glyphicon-upload"></i>
+					<span>Iniciar</span>
+				</button>
+			{% } %}
+			{% if (!i) { %}
+				<button class="btn btn-warning cancel">
+					<i class="glyphicon glyphicon-ban-circle"></i>
+					<span>Cancelar</span>
+				</button>
+			{% } %}
+		</td>
+	</tr>
+{% } %}
+</script>
+
+
+<!-- Custom and plugin javascript -->
+<script src="/zimec/public/temas/simec/js/plugins/pace/pace.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Chosen -->
+<script src="/zimec/public/temas/simec/js/plugins/chosen/chosen.jquery.js"></script>
+
+<!-- JSKnob -->
+<script src="/zimec/public/temas/simec/js/plugins/jsKnob/jquery.knob.js"></script>
+
+<!-- Switcher -->
+<script src="/zimec/public/temas/simec/js/plugins/bootstrap-switch/bootstrap-switch.js"></script>
+
+<!-- NanoScroller -->
+<script src="/zimec/public/temas/simec/js/plugins/nanoscroll/jquery.nanoscroller.min.js"></script>
+
+<!-- JsTree -->
+<script src="/zimec/public/temas/simec/js/plugins/jstree/jstree.min.js"></script>
+
+<!-- iCheck -->
+<script src="/zimec/public/temas/simec/js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- File Input -->
+<script src="/zimec/public/temas/simec/js/plugins/fileinput/fileinput.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/fileinput/fileinput_locale_pt-BR.js"></script>
+
+<!-- Summernote -->
+<script src="/zimec/public/temas/simec/js/plugins/summernote/summernote.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/summernote/summernote-pt-BR.js"></script>
+
+<!-- Flot -->
+<script src="/zimec/public/temas/simec/js/plugins/flot/jquery.flot.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/flot/jquery.flot.spline.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/flot/jquery.flot.pie.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/flot/jquery.flot.symbol.js"></script>
+
+<!-- Dropzone -->
+<script src="/zimec/public/temas/simec/js/plugins/dropzone/dropzone.js"></script>
+
+<!-- Masked Input -->
+<script src="/zimec/public/temas/simec/js/plugins/maskedinput/jquery.maskedinput.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/inputmask/inputmask.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/inputmask/jquery.inputmask.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/inputmask/inputmask.numeric.extensions.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/inputmask/inputmask.regex.extensions.min.js"></script>
+
+<!-- Menu -->
+<script src="/zimec/public/temas/simec/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+<!-- Datatables -->
+<script src="/zimec/public/temas/simec/js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+
+<!-- Gritter -->
+<script src="/zimec/public/temas/simec/js/plugins/gritter/jquery.gritter.min.js"></script>
+
+<!-- Bootbox -->
+<script src="/zimec/public/temas/simec/js/plugins/bootbox/bootbox.min.js"></script>
+
+<!-- Ion Range Slider -->
+<script src="/zimec/public/temas/simec/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+<!-- Validate -->
+<script src="/zimec/public/temas/simec/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/validate/jquery.validate.extend.js"></script>
+<script src="/zimec/public/temas/simec/js/plugins/validate/jquery.form.min.js"></script>
+
+<!-- Sweet Aler -->
+<script src="/zimec/public/temas/simec/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+<!-- Add fancyBox main JS and CSS files -->
+<script type="text/javascript" src="/library/fancybox/jquery.fancybox.js"></script>
+<link rel="stylesheet" type="text/css" href="/library/fancybox/jquery.fancybox.css" media="screen" />
+
+<!-- Add Button helper (this is optional) -->
+<link rel="stylesheet" type="text/css" href="/library/fancybox/helpers/jquery.fancybox-buttons.css" />
+<script type="text/javascript" src="/library/fancybox/helpers/jquery.fancybox-buttons.js"></script>
+
+<!-- Add Thumbnail helper (this is optional) -->
+<link rel="stylesheet" type="text/css" href="/library/fancybox/helpers/jquery.fancybox-thumbs.css" />
+<script type="text/javascript" src="/library/fancybox/helpers/jquery.fancybox-thumbs.js"></script>
+
+<!-- Add Media helper (this is optional) -->
+<script type="text/javascript" src="/library/fancybox/helpers/jquery.fancybox-media.js"></script>
+
+<!-- SIMEC -->
+<script src="/zimec/public/temas/simec/js/theme.js"></script>
+<script src="/zimec/public/temas/simec/js/simec.js"></script>
+<script src="/zimec/public/temas/simec/js/simec-eventos.js"></script>
+
+<script>
+$(document).ready(function() {
+
+    if(''){
+        swal({title: "", text: "", type: ""});
+    }
+});
+</script>
+

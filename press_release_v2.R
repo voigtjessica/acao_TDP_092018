@@ -148,7 +148,7 @@ geral <- obras %>%
     fim_da_vigencia_termo_convenio = ifelse(fim_da_vigencia_termo_convenio == "", NA, 
                                             fim_da_vigencia_termo_convenio)) %>%
    select(id, nome, municipio, uf, responsabilidade, logradouro, 
-         ano_convenio,total_pago, cancelada, concluida, paralisada, nao_iniciada, execucao, atrasada, sem_end, 
+         ano_convenio, valor_pactuado_com_o_fnde, cancelada, concluida, paralisada, nao_iniciada, execucao, atrasada, sem_end, 
          status, situacao_segundo_tbrasil, situacao, ano_fim_vigencia_convenio, termo_convenio, 
          data_prevista_de_conclusao_da_obra, final_previsto, ano_data_final_prevista_e_estimada, tipo_do_projeto) %>%
   rename(status_segundo_simec = situacao,
@@ -198,10 +198,3 @@ save(geral, file="situacao_todas_obras.Rdata")
 write.csv(geral , file="situacao_todas_obras.csv", sep=";", quote = TRUE,
            row.names = FALSE)
  
- drive_find(n_max=10) #autenticação
-
- lista_final_sheet <- drive_upload(
-   "situacao_todas_obras.csv",
-   path="~/TB/Tadepé/Transparência Brasil - Tá de Pé 2018",
-   name = "situacao_todas_obras_v10",
- type = "spreadsheet")
