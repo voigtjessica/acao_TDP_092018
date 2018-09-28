@@ -77,3 +77,4 @@ simec_fin2 <- bind_rows(infos[vec==5]) %>%
 
 lista_objetos <- list(infos, infos_backup, simec_fin2)
 save(lista_objetos, file = "arquivos_simec_fin_v2.RData")
+

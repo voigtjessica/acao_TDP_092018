@@ -18,6 +18,8 @@ load("situacao_todas_obras.Rdata")
 #dados da raspagem
 load("arquivos_simec_fin_v2.RData")
 
+simec_fin2 <- lista_objetos[[3]]
+
 # tenho informações sobre 12695 das 14432
 # 0.88 % das obras receberam algum repasse
 
